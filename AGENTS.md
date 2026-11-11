@@ -33,6 +33,6 @@ use the editor.
 
 - All owner-editable content (business details, services, vehicles, featured project, approach, contact) lives in `src/config/site.ts`; components read from it so copy changes never touch layout code.
 - Preview-only owner notes use `OwnerNote` / `import.meta.env.DEV`, so placeholders and "needs confirmation" tags never ship to the published site.
-- The hero 3D turbo is procedural geometry in `src/components/site/hero/TurboScene.tsx`, lazy-loaded client-side behind a static SVG fallback (`?static` forces the fallback) so the headline never waits on WebGL.
+- The hero turbo is a photoreal render image (`src/assets/hero-turbo.webp`) animated with CSS/DOM only (pointer tilt, luminance-masked light sweep) in `src/components/site/hero/HeroVisual.tsx`; no WebGL, so it loads instantly and needs no fallback path.
 - SVG coordinates computed with trig are rounded (`r2`) so server and browser markup match and hydration stays clean.
 - Project inquiries are inserted by the public `submitInquiry` server function using the publishable key and an insert-only RLS policy; visitors can never read submissions back.

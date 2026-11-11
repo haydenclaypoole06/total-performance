@@ -59,7 +59,7 @@ export function Hero() {
       {/* 3D centerpiece */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-14 -z-10 h-[52svh] md:top-0 md:h-full lg:left-[44%]"
+        className="absolute inset-x-0 top-14 -z-10 h-[52svh] md:top-0 md:h-full lg:left-[48%]"
       >
         <HeroVisual />
       </div>
@@ -67,7 +67,7 @@ export function Hero() {
         aria-hidden="true"
         className="label-mono absolute right-5 top-24 hidden text-[0.62rem] text-muted-foreground md:block lg:right-8"
       >
-        Fig. 01 — Compressor study / stylized
+        Fig. 01 — Turbocharger / illustrative render
       </p>
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-5 pb-24 pt-[48svh] md:justify-center md:px-8 md:pb-28 md:pt-28">
