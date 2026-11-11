@@ -20,7 +20,7 @@ export function Approach({ index }: { index: string }) {
         />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
         {!img.isRealShopPhoto && (
-          <p className="label-mono absolute bottom-6 right-5 text-[0.6rem] text-muted-foreground md:right-8">
+          <p className="label-mono absolute right-5 top-24 rounded-sm bg-background/70 px-2 py-1 text-[0.6rem] text-muted-foreground md:right-8 md:top-28">
             Illustrative image
           </p>
         )}

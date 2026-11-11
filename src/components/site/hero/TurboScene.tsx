@@ -21,7 +21,7 @@ const DRIFT_AMPLITUDE = 0.22; // rad, slow body sway
 const DRIFT_SPEED = 0.18;
 const POINTER_TILT = 0.28; // rad at screen edge
 const POINTER_DAMP = 3; // higher = snappier follow
-const BASE_YAW = -0.92; // rad, 3/4 profile so housing, bearing and turbine all read
+const BASE_YAW = -0.5; // rad, 3/4 profile so housing, bearing and turbine all read
 const BASE_PITCH = 0.2;
 
 /* ---------- Geometry builders ---------- */
@@ -73,38 +73,52 @@ function buildVolute(r0: number, r1: number, t0: number, t1: number, outlet: num
   return geo;
 }
 
+function quad(a: THREE.Vector2, c: THREE.Vector2, b: THREE.Vector2, t: number) {
+  const it = 1 - t;
+  return new THREE.Vector2(
+    it * it * a.x + 2 * it * t * c.x + t * t * b.x,
+    it * it * a.y + 2 * it * t * c.y + t * t * b.y,
+  );
+}
+
+/** Smooth twisted blade surface between hub and shroud curves (meridional r/z plane). */
 function buildBlade(splitter: boolean) {
-  const s = new THREE.Shape();
   const top = splitter ? 0.55 : 1.0;
-  const inducer = splitter ? 0.62 : 0.7;
-  const hubAtTop = splitter ? 0.3 : 0.14;
-  s.moveTo(hubAtTop, top);
-  s.lineTo(inducer, top);
-  s.quadraticCurveTo(inducer + 0.04, 0.4, 0.95, 0.2);
-  s.lineTo(0.95, 0.04);
-  s.quadraticCurveTo(0.32, 0.12, hubAtTop, top);
-  const depth = 0.028;
-  const geo = new THREE.ExtrudeGeometry(s, {
-    depth,
-    bevelEnabled: true,
-    bevelThickness: 0.006,
-    bevelSize: 0.006,
-    bevelSegments: 1,
-    curveSegments: 14,
-  });
-  const pos = geo.attributes["position"] as THREE.BufferAttribute;
-  const v = new THREE.Vector3();
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    const r = v.x;
-    const z = v.y; // axial
-    const tang = v.z - depth / 2;
-    // twist: inducer leans forward, exducer sweeps back
-    const phi = 0.95 * z - 0.4 * Math.max(0, r - 0.55);
-    const c = Math.cos(phi);
-    const sn = Math.sin(phi);
-    pos.setXYZ(i, r * c - tang * sn, r * sn + tang * c, z);
+  const hubA = new THREE.Vector2(splitter ? 0.3 : 0.14, top);
+  const hubC = new THREE.Vector2(0.32, 0.12);
+  const hubB = new THREE.Vector2(0.95, 0.04);
+  const tipA = new THREE.Vector2(splitter ? 0.62 : 0.7, top);
+  const tipC = new THREE.Vector2(0.74, 0.4);
+  const tipB = new THREE.Vector2(0.95, 0.2);
+  const U = 20;
+  const V = 6;
+  const positions: number[] = [];
+  const uvs: number[] = [];
+  const index: number[] = [];
+  for (let i = 0; i <= U; i++) {
+    const u = i / U;
+    const h = quad(hubA, hubC, hubB, u);
+    const t = quad(tipA, tipC, tipB, u);
+    for (let j = 0; j <= V; j++) {
+      const v = j / V;
+      const r = h.x + (t.x - h.x) * v;
+      const z = h.y + (t.y - h.y) * v;
+      const phi = 0.95 * z - 0.4 * Math.max(0, r - 0.55);
+      positions.push(r * Math.cos(phi), r * Math.sin(phi), z);
+      uvs.push(u, v);
+    }
   }
+  for (let i = 0; i < U; i++) {
+    for (let j = 0; j < V; j++) {
+      const a = i * (V + 1) + j;
+      const b = a + V + 1;
+      index.push(a, b, a + 1, b, b + 1, a + 1);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geo.setIndex(index);
   geo.computeVertexNormals();
   return geo;
 }
@@ -130,8 +144,8 @@ function buildHub(seg: number) {
 function buildShroud(seg: number) {
   // inner wall of compressor cover, from inlet to volute
   const pts = [
-    [0.74, 1.95],
-    [0.76, 1.1],
+    [0.74, 1.5],
+    [0.76, 1.05],
     [0.8, 0.7],
     [1.02, 0.25],
     [1.2, 0.08],
@@ -156,6 +170,39 @@ function buildTicks(radius: number, count: number) {
   return g;
 }
 
+function OutletFlange({
+  curve,
+  radius,
+  material,
+  body,
+}: {
+  curve: THREE.Curve<THREE.Vector3>;
+  radius: number;
+  material: THREE.Material;
+  body: THREE.Material;
+}) {
+  const { position, quaternion } = useMemo(() => {
+    const p = curve.getPointAt(1);
+    const t = curve.getTangentAt(1).normalize();
+    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), t);
+    return { position: p, quaternion: q };
+  }, [curve]);
+  return (
+    <group position={position} quaternion={quaternion}>
+      <mesh material={material}>
+        <torusGeometry args={[radius, 0.05, 12, 48]} />
+      </mesh>
+      <mesh position={[0, 0, -0.06]} material={body}>
+        <torusGeometry args={[radius + 0.02, 0.035, 10, 48]} />
+      </mesh>
+      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.02]}>
+        <cylinderGeometry args={[radius - 0.01, radius - 0.01, 0.02, 48]} />
+        <meshStandardMaterial color="#080B10" roughness={1} metalness={0} />
+      </mesh>
+    </group>
+  );
+}
+
 /* ---------- Model ---------- */
 function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
   const body = useRef<THREE.Group>(null);
@@ -165,6 +212,8 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
   const ready = useRef(false);
   const seg = compact ? 18 : 32;
 
+  const compCurve = useMemo(() => new VoluteCurve(1.25, 1.5, 1.5), []);
+  const turbCurve = useMemo(() => new VoluteCurve(1.0, 1.25, 1.0), []);
   const geo = useMemo(() => {
     return {
       compVolute: buildVolute(1.25, 1.5, 0.2, 0.46, 1.5, seg),
@@ -184,10 +233,10 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
 
   const mats = useMemo(
     () => ({
-      housing: new THREE.MeshStandardMaterial({ color: "#b9c2ce", metalness: 0.92, roughness: 0.34 }),
+      housing: new THREE.MeshStandardMaterial({ color: "#b9c2ce", metalness: 0.92, roughness: 0.34, side: THREE.DoubleSide }),
       cast: new THREE.MeshStandardMaterial({ color: "#2a313b", metalness: 0.85, roughness: 0.55 }),
       graphite: new THREE.MeshStandardMaterial({ color: "#1b222c", metalness: 0.9, roughness: 0.4 }),
-      wheel: new THREE.MeshStandardMaterial({ color: "#e4ebf2", metalness: 1, roughness: 0.24 }),
+      wheel: new THREE.MeshStandardMaterial({ color: "#e4ebf2", metalness: 1, roughness: 0.24, side: THREE.DoubleSide }),
       blue: new THREE.MeshStandardMaterial({
         color: "#006BFF",
         metalness: 0.7,
@@ -250,7 +299,7 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
         </mesh>
       </group>
 
-      <group ref={body} rotation={[BASE_PITCH, BASE_YAW, 0.05]} scale={compact ? 0.86 : 0.92} position={[0.15, 0, 0]}>
+      <group ref={body} rotation={[BASE_PITCH, BASE_YAW, 0.05]} scale={compact ? 0.86 : 0.88} position={[-0.15, -0.05, 0]}>
         {/* Compressor side */}
         <mesh geometry={geo.compVolute} material={mats.housing} />
         <mesh geometry={geo.shroud} material={mats.housing} />
@@ -259,13 +308,13 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
           <cylinderGeometry args={[1.62, 1.62, 0.12, seg * 2]} />
         </mesh>
         {/* inlet machined rings */}
-        <mesh position={[0, 0, 1.95]} material={mats.blue}>
+        <mesh position={[0, 0, 1.5]} material={mats.blue}>
           <torusGeometry args={[0.8, 0.07, 16, seg * 2]} />
         </mesh>
-        <mesh position={[0, 0, 1.72]} material={mats.housing}>
+        <mesh position={[0, 0, 1.33]} material={mats.housing}>
           <torusGeometry args={[0.8, 0.04, 12, seg * 2]} />
         </mesh>
-        <mesh position={[0, 0, 1.5]} material={mats.housing}>
+        <mesh position={[0, 0, 1.18]} material={mats.housing}>
           <torusGeometry args={[0.8, 0.03, 12, seg * 2]} />
         </mesh>
         {/* v-band clamp */}
@@ -285,6 +334,8 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
             </mesh>
           );
         })}
+
+        <OutletFlange curve={compCurve} radius={0.46} material={mats.blue} body={mats.housing} />
 
         {/* Compressor wheel */}
         <group ref={wheel} position={[0, 0, 0.02]}>
@@ -322,6 +373,7 @@ function Turbo({ active, reducedMotion, compact, onReady }: TurboSceneProps) {
         {/* Turbine side */}
         <group position={[0, 0, -1.55]} rotation={[0, Math.PI, Math.PI * 0.6]}>
           <mesh geometry={geo.turbVolute} material={mats.cast} />
+          <OutletFlange curve={turbCurve} radius={0.38} material={mats.graphite} body={mats.cast} />
           <mesh position={[0, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]} material={mats.cast}>
             <cylinderGeometry args={[1.25, 1.25, 0.18, seg * 2]} />
           </mesh>
@@ -346,12 +398,12 @@ export default function TurboScene(props: TurboSceneProps) {
     >
       <ambientLight intensity={0.15} />
       <directionalLight position={[3, 4, 5]} intensity={1.6} color="#F5F7FA" />
-      <pointLight position={[-4, 1, -2]} intensity={18} color="#006BFF" distance={14} />
+      <pointLight position={[-4, 1, -2]} intensity={10} color="#006BFF" distance={14} />
       <pointLight position={[4, -2, -3]} intensity={12} color="#63CFFF" distance={12} />
       <Environment resolution={128}>
         <Lightformer intensity={2.6} position={[0, 5, 2]} scale={[10, 3, 1]} color="#F5F7FA" />
         <Lightformer intensity={1.4} position={[2, 1, 6]} scale={[6, 2, 1]} color="#F5F7FA" />
-        <Lightformer intensity={1.6} position={[-6, 0, 0]} rotation-y={Math.PI / 2} scale={[12, 1.2, 1]} color="#006BFF" />
+        <Lightformer intensity={0.9} position={[-6, 0, 0]} rotation-y={Math.PI / 2} scale={[12, 1.2, 1]} color="#006BFF" />
         <Lightformer intensity={1.6} position={[6, 1, 1]} rotation-y={-Math.PI / 2} scale={[10, 0.6, 1]} color="#63CFFF" />
         <Lightformer intensity={0.6} position={[0, -5, 0]} rotation-x={-Math.PI / 2} scale={[10, 10, 1]} color="#141A23" />
       </Environment>

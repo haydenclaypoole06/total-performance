@@ -113,7 +113,7 @@ export function Inquiry({ index }: { index: string }) {
       <div className="mx-auto grid max-w-7xl gap-14 px-5 md:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
         <Reveal>
           <SectionLabel index={index}>Contact</SectionLabel>
-          <h2 id="contact-heading" className="display mt-6 text-[clamp(3.25rem,9vw,7.5rem)]">
+          <h2 id="contact-heading" className="display mt-6 text-[clamp(3.25rem,11vw,5.5rem)] lg:text-[clamp(3.5rem,5vw,5.25rem)]">
             <span className="block">{inquiry.headline[0]}</span>
             <span className="block text-primary">{inquiry.headline[1]}</span>
           </h2>

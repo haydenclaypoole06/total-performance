@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- All owner-editable content (business details, services, vehicles, featured project, approach, contact) lives in `src/config/site.ts`; components read from it so copy changes never touch layout code.
+- Preview-only owner notes use `OwnerNote` / `import.meta.env.DEV`, so placeholders and "needs confirmation" tags never ship to the published site.
+- The hero 3D turbo is procedural geometry in `src/components/site/hero/TurboScene.tsx`, lazy-loaded client-side behind a static SVG fallback (`?static` forces the fallback) so the headline never waits on WebGL.
+- SVG coordinates computed with trig are rounded (`r2`) so server and browser markup match and hydration stays clean.
+- Project inquiries are inserted by the public `submitInquiry` server function using the publishable key and an insert-only RLS policy; visitors can never read submissions back.

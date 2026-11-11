@@ -84,7 +84,7 @@ export function Header() {
                 <Menu />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="flex w-[86vw] max-w-sm flex-col border-border bg-graphite p-0">
+            <SheetContent side="right" aria-describedby={undefined} className="flex w-[86vw] max-w-sm flex-col border-border bg-graphite p-0">
               <div className="flex h-16 items-center gap-3 border-b border-border px-6">
                 <LogoMark className="h-6" />
                 <SheetTitle className="font-display text-lg font-extrabold uppercase tracking-[0.08em]">
