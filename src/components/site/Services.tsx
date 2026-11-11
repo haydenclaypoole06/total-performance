@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { OwnerNote } from "./OwnerNote";
 import { Reveal } from "./Reveal";
 import { SectionLabel } from "./SectionLabel";
 import { ServiceGraphic } from "./ServiceGraphic";
@@ -11,7 +10,6 @@ export function Services() {
   const { services } = site;
   const [active, setActive] = useState(0);
   const current = services.items[active] ?? services.items[0]!;
-  const anyUnconfirmed = services.items.some((s) => !s.confirmed);
 
   return (
     <section id="services" aria-labelledby="services-heading" className="relative py-24 md:py-36">
@@ -26,7 +24,6 @@ export function Services() {
           </div>
           <div className="space-y-4">
             <p className="text-lg leading-relaxed text-muted-foreground">{services.intro}</p>
-            {anyUnconfirmed && <OwnerNote>Service list needs owner confirmation before launch</OwnerNote>}
           </div>
         </Reveal>
 
