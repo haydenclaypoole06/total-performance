@@ -323,46 +323,11 @@
   animation: scan 2.4s var(--ease-precise) infinite;
 }
 
-/* Hero turbo photo: soft edges, blue bloom, travelling highlight */
-@utility turbo-vignette {
-  mask-image: radial-gradient(closest-side, black 72%, transparent 100%);
-}
-
-@utility turbo-bloom {
+/* Soft blue bloom behind the hero 3D monogram */
+@utility hero-bloom {
   background: radial-gradient(
-    38% 34% at 46% 52%,
-    color-mix(in oklab, var(--electric) 22%, transparent),
+    40% 36% at 50% 50%,
+    color-mix(in oklab, var(--electric) 20%, transparent),
     transparent 70%
   );
-}
-
-@keyframes light-sweep {
-  0%,
-  20% {
-    background-position: 140% 0;
-  }
-  70%,
-  100% {
-    background-position: -40% 0;
-  }
-}
-
-@utility turbo-sweep {
-  background-image: linear-gradient(
-    105deg,
-    transparent 38%,
-    color-mix(in oklab, var(--ice) 35%, transparent) 48%,
-    color-mix(in oklab, var(--white) 55%, transparent) 50%,
-    color-mix(in oklab, var(--ice) 35%, transparent) 52%,
-    transparent 62%
-  );
-  background-size: 250% 100%;
-  background-repeat: no-repeat;
-  mix-blend-mode: screen;
-  opacity: 0.55;
-  animation: light-sweep 7s var(--ease-precise) infinite;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    opacity: 0;
-  }
 }

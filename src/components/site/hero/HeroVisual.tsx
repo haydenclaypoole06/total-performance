@@ -1,107 +1,127 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 
-import turboImg from "@/assets/hero-turbo.webp";
+import tpMark from "@/assets/tp-mark-light.png.asset.json";
 
-/** Tilt feel, in degrees / pixels at the edge of the hero. */
-const MAX_TILT = 6;
-const MAX_SHIFT = 14;
-const EASE = 0.06;
+const MonogramScene = lazy(() => import("./MonogramScene"));
+
+class SceneBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
+  override state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  override componentDidCatch(error: unknown) {
+    console.warn("3D hero unavailable, showing static logo.", error);
+  }
+  override render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
+type Mode = "pending" | "3d" | "static";
+
+function canRender3D(): boolean {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("static")) return false;
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      connection?: { saveData?: boolean };
+    };
+    if (nav.connection?.saveData) return false;
+    if (nav.deviceMemory !== undefined && nav.deviceMemory < 2) return false;
+    if (nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency < 2) return false;
+    const c = document.createElement("canvas");
+    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
 
 /**
- * Hero centerpiece: a photoreal turbocharger render with a slow light sweep across the metal
- * and a gentle pointer tilt. Pure CSS/DOM, so it is instant, needs no WebGL, and the motion is
- * skipped entirely for reduced-motion and touch-only visitors.
+ * Hero 3D centerpiece. The static logo shows when 3D is unavailable (or with ?static); otherwise the scene fades in
+ * once it has drawn its first frame, so the headline and buttons never wait on WebGL.
  */
 export function HeroVisual() {
-  const stage = useRef<HTMLDivElement>(null);
-  const [loaded, setLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const wrapper = useRef<HTMLDivElement>(null);
+  const [mode, setMode] = useState<Mode>("pending");
+  const [ready, setReady] = useState(false);
+  const [inView, setInView] = useState(true);
+  const [tabVisible, setTabVisible] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [compact, setCompact] = useState(false);
 
-  // Cached images can finish before React attaches onLoad.
   useEffect(() => {
-    if (imgRef.current?.complete) setLoaded(true);
-  }, []);
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sm = window.matchMedia("(max-width: 767px)");
+    setReducedMotion(mq.matches);
+    setCompact(sm.matches);
+    const onMq = () => setReducedMotion(mq.matches);
+    const onSm = () => setCompact(sm.matches);
+    mq.addEventListener("change", onMq);
+    sm.addEventListener("change", onSm);
 
-  useEffect(() => {
-    const el = stage.current;
-    if (!el) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-    if (reduce.matches || !finePointer.matches) return;
+    const onVis = () => setTabVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onVis);
 
-    const target = { x: 0, y: 0 };
-    const cur = { x: 0, y: 0 };
-    let raf = 0;
+    // Let the headline paint first, then decide on 3D.
+    const idle =
+      (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
+        .requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 200));
+    idle(() => setMode(canRender3D() ? "3d" : "static"), { timeout: 1200 });
 
-    const tick = () => {
-      cur.x += (target.x - cur.x) * EASE;
-      cur.y += (target.y - cur.y) * EASE;
-      el.style.transform = `perspective(1400px) rotateY(${(cur.x * MAX_TILT).toFixed(3)}deg) rotateX(${(
-        -cur.y * MAX_TILT
-      ).toFixed(3)}deg) translate3d(${(cur.x * MAX_SHIFT).toFixed(2)}px, ${(cur.y * MAX_SHIFT).toFixed(2)}px, 0)`;
-      if (Math.abs(target.x - cur.x) > 0.0005 || Math.abs(target.y - cur.y) > 0.0005) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        raf = 0;
-      }
-    };
-    const onMove = (e: PointerEvent) => {
-      target.x = (e.clientX / window.innerWidth) * 2 - 1;
-      target.y = (e.clientY / window.innerHeight) * 2 - 1;
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-    const onLeave = () => {
-      target.x = 0;
-      target.y = 0;
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    document.addEventListener("pointerleave", onLeave);
     return () => {
-      window.removeEventListener("pointermove", onMove);
-      document.removeEventListener("pointerleave", onLeave);
-      cancelAnimationFrame(raf);
+      mq.removeEventListener("change", onMq);
+      sm.removeEventListener("change", onSm);
+      document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
 
-  const sweepMask: CSSProperties = {
-    maskImage: `url(${turboImg})`,
-    WebkitMaskImage: `url(${turboImg})`,
-    maskMode: "luminance",
-    maskSize: "contain",
-    WebkitMaskSize: "contain",
-    maskRepeat: "no-repeat",
-    WebkitMaskRepeat: "no-repeat",
-    maskPosition: "center",
-    WebkitMaskPosition: "center",
-  };
+  useEffect(() => {
+    const el = wrapper.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => entry && setInView(entry.isIntersecting), {
+      threshold: 0.01,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const fallback =
+    mode === "static" ? (
+      <img src={tpMark.url} alt="" width={600} height={300} className="w-[min(78%,520px)] opacity-90" />
+    ) : null;
 
   return (
-    <div className="relative flex h-full w-full items-center justify-center" data-scene-ready={loaded ? "true" : undefined}>
-      {/* blue bloom behind the part */}
-      <div aria-hidden="true" className="turbo-bloom absolute inset-0" />
+    <div
+      ref={wrapper}
+      className="relative h-full w-full"
+      data-scene-mode={mode}
+      data-scene-ready={ready || mode === "static" ? "true" : undefined}
+    >
+      <div aria-hidden="true" className="hero-bloom absolute inset-0" />
       <div
-        className={`turbo-vignette relative aspect-square w-[min(100%,82svh,760px)] transition-[opacity,translate] duration-1000 ease-out ${
-          loaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+        className={`absolute inset-0 flex items-center justify-center p-6 transition-opacity duration-700 ${
+          ready ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div ref={stage} className="relative h-full w-full will-change-transform">
-          <img
-            ref={imgRef}
-            src={turboImg}
-            alt=""
-            width={1400}
-            height={1400}
-            fetchPriority="high"
-            decoding="async"
-            onLoad={() => setLoaded(true)}
-            className="h-full w-full select-none object-contain"
-            draggable={false}
-          />
-          {/* moving highlight that only lands on the bright metal */}
-          <div aria-hidden="true" className="turbo-sweep absolute inset-0" style={sweepMask} />
-        </div>
+        {fallback}
       </div>
+      {mode === "3d" && (
+        <SceneBoundary fallback={<div className="absolute inset-0 flex items-center justify-center"><img src={tpMark.url} alt="" className="w-[min(78%,520px)] opacity-90" /></div>}>
+          <Suspense fallback={null}>
+            <div
+              className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}
+            >
+              <MonogramScene
+                active={inView && tabVisible}
+                reducedMotion={reducedMotion}
+                compact={compact}
+                onReady={() => setReady(true)}
+              />
+            </div>
+          </Suspense>
+        </SceneBoundary>
+      )}
     </div>
   );
 }

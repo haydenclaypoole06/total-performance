@@ -67,7 +67,7 @@ export function Hero() {
         aria-hidden="true"
         className="label-mono absolute right-5 top-24 hidden text-[0.62rem] text-muted-foreground md:block lg:right-8"
       >
-        Fig. 01 — Turbocharger / illustrative render
+        Fig. 01 — TP / redline study
       </p>
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-5 pb-24 pt-[48svh] md:justify-center md:px-8 md:pb-28 md:pt-28">
