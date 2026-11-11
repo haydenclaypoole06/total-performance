@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertCircle, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
-import { useId, useRef, useState } from "react";
+import { AlertCircle, ArrowRight, Check, CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { PREFILL_EVENT } from "@/lib/inquiry-prefill";
 import { inquirySchema, type InquiryInput } from "@/lib/inquiry-schema";
 import { submitInquiry } from "@/lib/inquiry.functions";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,7 @@ const fields: {
   multiline?: boolean;
   placeholder?: string;
   wide?: boolean;
+  options?: readonly string[];
 }[] = [
   { name: "name", label: "Name", required: true, autoComplete: "name" },
   { name: "email", label: "Email", required: true, type: "email", autoComplete: "email" },
@@ -43,8 +45,8 @@ const fields: {
   { name: "vehicle", label: "Vehicle year / make / model", required: true, placeholder: "e.g. 2016 Corvette Stingray" },
   { name: "currentModifications", label: "Current modifications", multiline: true, wide: true },
   { name: "request", label: "What would you like done?", required: true, multiline: true, wide: true },
-  { name: "budget", label: "Approximate budget" },
-  { name: "timeframe", label: "Preferred timeframe" },
+  { name: "budget", label: "Approximate budget", options: site.inquiry.budgetOptions },
+  { name: "timeframe", label: "Preferred timeframe", options: site.inquiry.timeframeOptions },
 ];
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -58,6 +60,37 @@ export function Inquiry({ index }: { index: string }) {
   const [serverError, setServerError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const uid = useId();
+  const lastPrefill = useRef("");
+
+  // "Discuss this" links elsewhere on the page start the request with the chosen service,
+  // without overwriting anything the visitor has already typed.
+  useEffect(() => {
+    const onPrefill = (e: Event) => {
+      const text = (e as CustomEvent<string>).detail;
+      setStatus((st) => (st === "success" ? "idle" : st));
+      setValues((v) => {
+        const current = v.request.trim();
+        if (current && v.request !== lastPrefill.current) return v;
+        lastPrefill.current = text;
+        return { ...v, request: text };
+      });
+      // Focus once the page has finished scrolling to the form; focusing mid-scroll cancels it.
+      let done = false;
+      const focusField = () => {
+        if (done) return;
+        done = true;
+        window.removeEventListener("scrollend", focusField);
+        const el = formRef.current?.querySelector<HTMLTextAreaElement>('[name="request"]');
+        if (!el) return;
+        el.focus({ preventScroll: true });
+        el.setSelectionRange(el.value.length, el.value.length);
+      };
+      window.addEventListener("scrollend", focusField);
+      window.setTimeout(focusField, 1600);
+    };
+    window.addEventListener(PREFILL_EVENT, onPrefill);
+    return () => window.removeEventListener(PREFILL_EVENT, onPrefill);
+  }, []);
 
   const update = (name: keyof Values, value: string) => {
     setValues((v) => ({ ...v, [name]: value }));
@@ -101,7 +134,7 @@ export function Inquiry({ index }: { index: string }) {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative isolate overflow-hidden py-24 md:py-36"
+      className="relative isolate overflow-clip py-24 md:py-36"
     >
       <div aria-hidden="true" className="hero-glow absolute inset-0 -z-10" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-[20%] top-10 -z-10 w-[70vw] max-w-[820px] opacity-[0.16] md:-right-[8%]">
@@ -111,13 +144,24 @@ export function Inquiry({ index }: { index: string }) {
       </div>
 
       <div className="mx-auto grid max-w-7xl gap-14 px-5 md:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
-        <Reveal>
+        <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <SectionLabel index={index}>Contact</SectionLabel>
           <h2 id="contact-heading" className="display mt-6 text-[clamp(3.25rem,11vw,5.5rem)] lg:text-[clamp(3.5rem,5vw,5.25rem)]">
             <span className="block">{inquiry.headline[0]}</span>
             <span className="block text-primary">{inquiry.headline[1]}</span>
           </h2>
           <p className="mt-8 max-w-md text-xl leading-relaxed text-muted-foreground">{inquiry.copy}</p>
+          <div className="mt-12 border-t border-border pt-8">
+            <p className="label-mono text-[0.68rem] text-ice">Helpful to include</p>
+            <ul className="mt-5 space-y-3">
+              {inquiry.helpfulToInclude.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-foreground/85">
+                  <Check aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
           <p className="label-mono mt-10 text-[0.65rem] text-muted-foreground">
             <span className="text-ice">*</span> Required
           </p>
@@ -186,7 +230,26 @@ export function Inquiry({ index }: { index: string }) {
                         {f.label}
                         {f.required ? <span className="text-ice"> *</span> : <span className="normal-case tracking-normal"> (optional)</span>}
                       </label>
-                      {f.multiline ? (
+                      {f.options ? (
+                        <div className="relative">
+                          <select
+                            {...shared}
+                            onChange={(e) => update(f.name, e.target.value)}
+                            className={cn(shared.className, "h-12 appearance-none pr-10", !values[f.name] && "text-muted-foreground/70")}
+                          >
+                            <option value="">Select…</option>
+                            {f.options.map((o) => (
+                              <option key={o} value={o} className="bg-graphite text-foreground">
+                                {o}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown
+                            aria-hidden="true"
+                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                          />
+                        </div>
+                      ) : f.multiline ? (
                         <textarea
                           {...shared}
                           rows={4}

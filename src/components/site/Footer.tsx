@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 import { site } from "@/config/site";
+import { visibleNav } from "@/lib/nav";
 import { LogoFull } from "./Logo";
 import { OwnerNote } from "./OwnerNote";
 
@@ -21,7 +22,7 @@ export function Footer({ onHome = true }: { onHome?: boolean }) {
         <nav aria-label="Footer">
           <p className="label-mono text-ice">Navigate</p>
           <ul className="mt-5 space-y-3">
-            {site.nav.map((n) => (
+            {visibleNav().map((n) => (
               <li key={n.href}>
                 <a href={href(n.href)} className="nav-sweep text-foreground/85 transition-colors hover:text-foreground">
                   {n.label}

@@ -1,12 +1,14 @@
+import { ArrowRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { prefillInquiry } from "@/lib/inquiry-prefill";
+import { featuredWorkVisible } from "@/lib/nav";
 import { OwnerNote } from "./OwnerNote";
 import { Reveal } from "./Reveal";
 import { SectionLabel } from "./SectionLabel";
 
-/** True when the section may appear: real project supplied, or the development preview. */
-export function featuredWorkVisible() {
-  return site.featuredWork.isReal || import.meta.env.DEV;
-}
+export { featuredWorkVisible };
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -87,6 +89,12 @@ export function FeaturedWork() {
             <h3 className="font-display mt-3 text-4xl font-extrabold uppercase leading-none md:text-5xl">
               {project.vehicle}
             </h3>
+            <Button asChild variant="tech" size="lg" className="mt-8">
+              <a href="#contact" onClick={() => prefillInquiry("A build similar to your featured project: ")}>
+                Plan a similar build
+                <ArrowRight aria-hidden="true" />
+              </a>
+            </Button>
           </div>
           <dl className="mt-8 md:mt-0">
             <Field label="Owner’s goal">{project.goal}</Field>

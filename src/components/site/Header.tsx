@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { site } from "@/config/site";
+import { visibleNav } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "./Logo";
 
@@ -16,7 +17,7 @@ export function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    const ids = site.nav.map((n) => n.href.slice(1));
+    const ids = visibleNav().map((n) => n.href.slice(1));
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -60,7 +61,7 @@ export function Header() {
 
         <nav aria-label="Primary" className="hidden justify-center lg:flex">
           <ul className="flex items-center gap-10">
-            {site.nav.map((item) => (
+            {visibleNav().map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
@@ -93,7 +94,7 @@ export function Header() {
               </div>
               <nav aria-label="Mobile" className="flex-1 px-6 py-8">
                 <ul className="space-y-1">
-                  {site.nav.map((item, i) => (
+                  {visibleNav().map((item, i) => (
                     <li key={item.href}>
                       <SheetClose asChild>
                         <a

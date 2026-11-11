@@ -189,6 +189,16 @@ export const site = {
     copy: "Tell us what you drive and what you have in mind.",
     submit: "Send Project Inquiry",
     note: "Submitting an inquiry does not confirm an appointment.",
+    /** Prompts shown beside the form to help people send a complete first message. */
+    helpfulToInclude: [
+      "Year, make, model and transmission",
+      "What’s already been done to the car",
+      "How you use it: daily, weekends, track or show",
+      "What you want it to feel like when it’s done",
+    ],
+    /** Choices for the optional budget / timeframe fields. These are the visitor's own ranges, not shop pricing. */
+    budgetOptions: ["Not sure yet", "Under $2,500", "$2,500 – $5,000", "$5,000 – $10,000", "$10,000 – $25,000", "$25,000+"],
+    timeframeOptions: ["As soon as possible", "Within 1–3 months", "3–6 months", "Just exploring options"],
   },
 
   contact: {
