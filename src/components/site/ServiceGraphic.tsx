@@ -25,6 +25,96 @@ export function ServiceGraphic({ type, className }: { type: G; className?: strin
 
   let art: React.ReactNode = null;
   switch (type) {
+          case "wiring":
+      art = (
+        <g {...common}>
+          {/* Main harness connector */}
+          <rect
+            x="42" y="154" width="76" height="92" rx="8"
+            stroke={stroke} strokeWidth="3"
+          />
+          <rect
+            x="52" y="166" width="26" height="68" rx="3"
+            stroke="var(--steel)" strokeWidth="2"
+          />
+          <path
+            d="M64 154 V144 H96 V154"
+            stroke="var(--electric)" strokeWidth="3"
+          />
+
+          {/* Four individually routed wires */}
+          {[
+            "M118 176 H164 Q184 176 184 156 V100 Q184 80 204 80 H286",
+            "M118 192 H212 Q232 192 232 172 V160 H286",
+            "M118 208 H212 Q232 208 232 228 V240 H286",
+            "M118 224 H164 Q184 224 184 244 V300 Q184 320 204 320 H286",
+          ].map((d, i) => (
+            <path
+              key={d}
+              d={d}
+              className="draw-line"
+              style={{
+                ["--len" as string]: 320,
+                transitionDelay: `${i * 90}ms`,
+              }}
+              stroke={i % 2 === 0 ? "var(--electric)" : stroke}
+              strokeWidth="3"
+            />
+          ))}
+
+          {/* Harness sleeve */}
+          <path
+            d="M128 164 H158 M128 236 H158"
+            stroke="var(--steel)" strokeWidth="2"
+          />
+          {[132, 142, 152].map((x) => (
+            <line
+              key={x}
+              x1={x} y1="166" x2={x} y2="234"
+              stroke="var(--steel)"
+              strokeWidth="2"
+              opacity="0.65"
+            />
+          ))}
+
+          {/* Branch connectors and terminal pins */}
+          {[80, 160, 240, 320].map((y) => (
+            <g key={y}>
+              <rect
+                x="286" y={y - 20}
+                width="52" height="40" rx="5"
+                stroke={stroke} strokeWidth="2.5"
+              />
+              <path
+                d={`M298 ${y - 20} V${y - 27} H320 V${y - 20}`}
+                stroke="var(--steel)" strokeWidth="2"
+              />
+              <line
+                x1="338" y1={y - 8} x2="356" y2={y - 8}
+                stroke="var(--white)" strokeWidth="3"
+              />
+              <line
+                x1="338" y1={y + 8} x2="356" y2={y + 8}
+                stroke="var(--white)" strokeWidth="3"
+              />
+              <circle
+                cx="310" cy={y} r="4"
+                fill="var(--electric)" stroke="none"
+              />
+            </g>
+          ))}
+
+          {/* Main connector terminals */}
+          {[178, 194, 210, 226].map((y) => (
+            <line
+              key={y}
+              x1="58" y1={y} x2="70" y2={y}
+              stroke="var(--white)" strokeWidth="3"
+            />
+          ))}
+        </g>
+      );
+      break;
     case "tach": {
       const ticks = 41;
       art = (
