@@ -58,7 +58,7 @@ export const site = {
     eyebrow: "TOTAL RACING & PERFORMANCE",
     headline: ["YOUR VISION.", "OUR STANDARDS."],
     copy: "Your goals shape the build. Our standards guide every detail—from the right combination of parts to the care behind the installation.",
-    primaryCta: "primaryCta: LET’S TALK HORSEPOWER & PERFORMANCE",
+    primaryCta: "LET’S TALK HORSEPOWER & PERFORMANCE",
     secondaryCta: "Explore Services",
   },
 
@@ -126,19 +126,21 @@ export const site = {
     ] as Service[],
   },
 
-  items: [
-  "CORVETTE",
-  "VIPER",
-  "GM LS & LT",
-  "COYOTE / FORD",
-  "MOPAR",
-  "EURO PERFORMANCE",
-  "IMPORTS",
-  "CLASSICS & RESTOMODS",
-  "CUSTOM BUILDS",
-],
+   vehicleFocus: {
+    items: [
+      "CORVETTE",
+      "VIPER",
+      "GM LS & LT",
+      "COYOTE / FORD",
+      "MOPAR",
+      "EURO PERFORMANCE",
+      "IMPORTS",
+      "CLASSICS & RESTOMODS",
+      "CUSTOM BUILDS",
+    ],
     confirmed: false,
-    disclaimer: "Vehicle names are used descriptively. No manufacturer affiliation is implied.",
+    disclaimer:
+      "Vehicle names are used descriptively. No manufacturer affiliation is implied.",
   },
 
   featuredWork: {
