@@ -122,7 +122,16 @@ export const site = {
   },
 
   vehicleFocus: {
-    items: ["CORVETTE", "LS & LT", "AMERICAN MUSCLE", "ENTHUSIAST BUILDS"],
+    items: [
+  "CORVETTE",
+  "GM LS & LT",
+  "HEMI",
+  "MODERN MUSCLE",
+  "EURO PERFORMANCE",
+  "IMPORTS",
+  "CLASSICS & RESTOMODS",
+  "CUSTOM BUILDS",
+],
     confirmed: false,
     disclaimer: "Vehicle names are used descriptively. No manufacturer affiliation is implied.",
   },
