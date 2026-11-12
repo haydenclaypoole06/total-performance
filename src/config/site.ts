@@ -176,7 +176,7 @@ export const site = {
       },
       {
         title: "Follow through on the details",
-        text: "Fitment, wiring, routing, and finish all matter. We give the installation the same consideration as the parts we choose.",
+        text: "The job isn’t finished when the parts are installed. We check how everything fits, functions, and works together before calling it complete.",
       },
       {
         title: "Keep things clear",
