@@ -222,9 +222,9 @@ export const site = {
     note: "We’ll review your request and contact you about the next step. Submitting does not book an appointment.",
     /** Prompts shown beside the form to help people send a complete first message. */
     helpfulToInclude: [
-  "What you drive",
-  "What you’d like to improve or have repaired",
-  "Anything else you think we should know",
+  "Your vehicle and any relevant modifications",
+  "What you’d like to improve—or what isn’t working right",
+  "How you use the car and what matters most to you",
 ],
     /** Choices for the optional budget / timeframe fields. These are the visitor's own ranges, not shop pricing. */
     budgetOptions: ["Not sure yet", "Under $2,500", "$2,500 – $5,000", "$5,000 – $10,000", "$10,000 – $25,000", "$25,000+"],
