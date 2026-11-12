@@ -26,7 +26,7 @@ export function Services() {
 >
   <span className="block">Your next upgrade</span>
   <span className="block text-primary">starts here.</span>
-</h2>`
+</h2>
           </div>
           <div className="space-y-4">
             <p className="text-lg leading-relaxed text-muted-foreground">{services.intro}</p>
@@ -122,9 +122,6 @@ export function Services() {
                   </Button>
                 </div>
               </div>
-              <p className="label-mono mt-4 text-[0.62rem] text-muted-foreground">
-                Diagram is illustrative
-              </p>
             </div>
           </div>
         </div>
