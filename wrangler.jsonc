@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "total-performance-tx",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-11-11",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "SUPABASE_URL": "https://c--4d29f325-504b-4f10-8da0-5a077e2f9053-prod.lovable.cloud",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable__ZUQ4Pc01SgLvNU4Yhdy9Q_wAfuEmYu"
+  }
+}
