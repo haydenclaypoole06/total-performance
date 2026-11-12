@@ -178,7 +178,7 @@ export function Inquiry({ index }: { index: string }) {
           </h2>
           <p className="mt-8 max-w-md text-xl leading-relaxed text-muted-foreground">{inquiry.copy}</p>
           <div className="mt-12 border-t border-border pt-8">
-            <p className="label-mono text-[0.68rem] text-ice">Helpful to include</p>
+            <p className="label-mono text-[0.68rem] text-ice">A GOOD PLACE TO START</p>
             <ul className="mt-5 space-y-3">
               {inquiry.helpfulToInclude.map((item) => (
                 <li key={item} className="flex items-start gap-3 text-foreground/85">
