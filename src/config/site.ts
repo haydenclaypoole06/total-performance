@@ -195,7 +195,7 @@ export const site = {
   },
 
   process: {
-    heading: "FROM IDEA TO NEXT STEP.",
+    heading: "LET’S GET YOUR BUILD STARTED.",
     steps: [
       {
         number: "01",
@@ -203,9 +203,9 @@ export const site = {
         text: "Share the vehicle, current modifications, and what you want to change.",
       },
       {
-        number: "02",
-        title: "Discuss the Plan",
-        text: "Talk through the scope, priorities, and proposed work.",
+       number: "02",
+       title: "Discuss the Plan",
+       text: "We’ll walk you through our recommendations, answer your questions, and agree on the work and budget before scheduling.",
       },
       {
         number: "03",
