@@ -1,5 +1,5 @@
 /**
- * TOTAL PERFORMANCE — central editable content.
+ * TOTAL RACING & PERFORMANCE — central editable content.
  *
  * Everything the owner may need to change lives here: business details, services,
  * vehicle focus, featured project, approach copy and contact methods.
@@ -42,10 +42,10 @@ export interface ContactMethods {
 }
 
 export const site = {
-  name: "TOTAL PERFORMANCE",
+  name: "TOTAL RACING & PERFORMANCE",
   tagline: "Precision engineered. Performance driven.",
   description:
-    "TOTAL PERFORMANCE is an automotive performance shop for engine, camshaft, forced induction, suspension and drivability work. Tell us about your car and start planning your build.",
+    "TOTAL RACING & PERFORMANCE is an automotive performance shop for engine, camshaft, forced induction, suspension and drivability work. Tell us about your car and start planning your build.",
 
   nav: [
     { label: "Services", href: "#services" },
@@ -55,7 +55,7 @@ export const site = {
   ],
 
   hero: {
-    eyebrow: "TOTAL PERFORMANCE",
+    eyebrow: "TOTAL RACING & PERFORMANCE",
     headline: ["YOUR VISION.", "OUR STANDARDS."],
     copy: "Your goals shape the build. Our standards guide every detail—from the right combination of parts to the care behind the installation.",
     primaryCta: "LET’S TALK ABOUT YOUR BUILD",
