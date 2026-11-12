@@ -8,9 +8,9 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy — TOTAL PERFORMANCE" },
-      { name: "description", content: "How TOTAL PERFORMANCE handles the information you send through the project inquiry form." },
-      { property: "og:title", content: "Privacy — TOTAL PERFORMANCE" },
+      { title: "Privacy — TOTAL RACING & PERFORMANCE" },
+      { name: "description", content: "How TOTAL RACING & PERFORMANCE handles the information you send through the project inquiry form." },
+      { property: "og:title", content: "Privacy — TOTAL RACING & PERFORMANCE" },
       { property: "og:description", content: "How we handle the information you send through our project inquiry form." },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
