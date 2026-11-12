@@ -17,13 +17,16 @@ export function Services() {
   return (
     <section id="services" aria-labelledby="services-heading" className="relative py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <Reveal className="grid gap-8 md:grid-cols-[1fr_minmax(0,28rem)] md:items-end">
+        <Reveal className="grid gap-8 md:grid-cols-[1fr_minmax(0,28rem)] md:items-center">
           <div>
             <SectionLabel index="01">Services</SectionLabel>
-            <h2 id="services-heading" className="display mt-6 text-[clamp(3rem,8vw,6.5rem)]">
-             Your next upgrade <br className="hidden sm:block" /> 
-             <span className="text-primary">starts here.</span>
-            </h2>
+           <h2
+  id="services-heading"
+  className="display mt-6 text-[clamp(2.5rem,5vw,4.5rem)]"
+>
+  <span className="block">Your next upgrade</span>
+  <span className="block text-primary">starts here.</span>
+</h2>`
           </div>
           <div className="space-y-4">
             <p className="text-lg leading-relaxed text-muted-foreground">{services.intro}</p>
