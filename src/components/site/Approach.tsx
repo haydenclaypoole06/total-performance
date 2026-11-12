@@ -30,10 +30,13 @@ export function Approach({ index }: { index: string }) {
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20">
           <Reveal>
             <SectionLabel index={index}>Our Approach</SectionLabel>
-            <h2 id="approach-heading" className="display mt-6 text-[clamp(3rem,8vw,6.5rem)]">
-              Your car. <br />
-              <span className="text-primary">A clear plan.</span>
-            </h2>
+           <h2
+  id="approach-heading"
+  className="display mt-6 text-[clamp(2.5rem,5vw,4.5rem)]"
+>
+  <span className="block">Every build deserves</span>
+  <span className="block text-primary">a plan of its own.</span>
+</h2>
             <p className="mt-8 max-w-xl text-xl leading-relaxed text-foreground/85 md:text-2xl md:leading-relaxed">
               {approach.copy}
             </p>
