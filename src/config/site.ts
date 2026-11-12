@@ -22,7 +22,8 @@ export type ServiceGraphic =
   | "compressor"
   | "waveform"
   | "suspension"
-  | "torque";
+  | "torque"
+  | "wiring";
 
 export interface Service {
   number: string;
@@ -108,6 +109,14 @@ export const site = {
         description: "Address the foundation that your next upgrade depends on.",
         graphic: "torque",
         confirmed: false,
+      },
+      {
+        number: "07",
+        title: "Custom Wiring",
+        description:
+          "Engine-swap wiring, custom harnesses, gauges, and accessories—with clean routing, secure connections, and attention to serviceability.",
+        graphic: "wiring",
+        confirmed: true,
       },
     ] as Service[],
   },
