@@ -58,7 +58,7 @@ export const site = {
     eyebrow: "TOTAL RACING & PERFORMANCE",
     headline: ["YOUR VISION.", "OUR STANDARDS."],
     copy: "Your goals shape the build. Our standards guide every detail—from the right combination of parts to the care behind the installation.",
-    primaryCta: "LET’S TALK ABOUT YOUR BUILD",
+    primaryCta: "primaryCta: LET’S TALK HORSEPOWER & PERFORMANCE",
     secondaryCta: "Explore Services",
   },
 
@@ -70,14 +70,16 @@ export const site = {
       {
         number: "01",
         title: "Performance Upgrades",
-        description: "Bolt-ons and supporting modifications planned around your goals.",
+        description:
+  "Intake, exhaust, and supporting upgrades selected to bring more out of your car and work together as a complete combination.",
         graphic: "tach",
         confirmed: false,
       },
       {
         number: "02",
         title: "Engine & Camshaft Upgrades",
-        description: "Talk with us about the next stage of your engine combination.",
+        description:
+  "Camshaft packages, cylinder head upgrades, and engine combinations built around your power goals and how you drive.",
         graphic: "camshaft",
         confirmed: false,
       },
@@ -85,28 +87,31 @@ export const site = {
         number: "03",
         title: "Forced Induction",
         description:
-          "Discuss supercharger or turbocharger installation and the supporting work your build requires.",
+  "Supercharger and turbocharger installations with the fuel, cooling, and supporting upgrades your combination needs.",
         graphic: "compressor",
         confirmed: false,
       },
       {
         number: "04",
         title: "Diagnostics & Drivability",
-        description: "Start with understanding the issue and planning the next step.",
+        description:
+  "From warning lights to problems you can feel behind the wheel, we test to find the cause and explain what it takes to fix it.",
         graphic: "waveform",
         confirmed: false,
       },
       {
         number: "05",
         title: "Suspension & Brakes",
-        description: "Explore upgrades that support handling, control, and confidence.",
+        description:
+  "Suspension and brake upgrades matched to your car’s power, tire setup, and use—for better control through every turn and stop.",
         graphic: "suspension",
         confirmed: false,
       },
       {
         number: "06",
         title: "Maintenance & Supporting Work",
-        description: "Address the foundation that your next upgrade depends on.",
+        description:
+  "Fluid services, leak repairs, and worn-component replacement to keep your car dependable and ready for what comes next.",
         graphic: "torque",
         confirmed: false,
       },
@@ -121,12 +126,12 @@ export const site = {
     ] as Service[],
   },
 
-  vehicleFocus: {
-    items: [
+  items: [
   "CORVETTE",
+  "VIPER"
   "GM LS & LT",
-  "HEMI",
-  "MODERN MUSCLE",
+  "COYOTE / FORD",
+  "MOPAR",
   "EURO PERFORMANCE",
   "IMPORTS",
   "CLASSICS & RESTOMODS",
