@@ -55,9 +55,9 @@ export const site = {
 
   hero: {
     eyebrow: "TOTAL PERFORMANCE",
-    headline: ["BUILT FOR", "MORE."],
-    copy: "More response. More excitement. A build that fits your vision. Let’s talk about what’s next for your car.",
-    primaryCta: "Discuss Your Build",
+    headline: ["YOUR VISION.", "OUR STANDARDS."],
+    copy: "Your goals shape the build. Our standards guide every detail—from the right combination of parts to the care behind the installation.",
+    primaryCta: "LET’S TALK ABOUT YOUR BUILD",
     secondaryCta: "Explore Services",
   },
 
