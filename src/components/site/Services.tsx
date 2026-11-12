@@ -21,8 +21,8 @@ export function Services() {
           <div>
             <SectionLabel index="01">Services</SectionLabel>
             <h2 id="services-heading" className="display mt-6 text-[clamp(3rem,8vw,6.5rem)]">
-              Performance <br className="hidden sm:block" />
-              with a <span className="text-primary">purpose.</span>
+             Your next upgrade <br className="hidden sm:block" /> 
+             <span className="text-primary">starts here.</span>
             </h2>
           </div>
           <div className="space-y-4">
