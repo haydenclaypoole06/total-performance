@@ -40,7 +40,6 @@ export function VehicleStrip() {
       </div>
 
       <div className="mx-auto -mt-4 flex max-w-7xl flex-wrap items-center gap-4 px-5 pb-8 md:-mt-6 md:px-8 md:pb-10">
-        <p className="label-mono text-[0.62rem] text-muted-foreground">{vehicleFocus.disclaimer}</p>
         {!vehicleFocus.confirmed && <OwnerNote>Confirm vehicle coverage</OwnerNote>}
       </div>
     </section>
