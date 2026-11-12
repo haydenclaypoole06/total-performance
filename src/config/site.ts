@@ -128,7 +128,7 @@ export const site = {
 
   items: [
   "CORVETTE",
-  "VIPER"
+  "VIPER",
   "GM LS & LT",
   "COYOTE / FORD",
   "MOPAR",
