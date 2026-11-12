@@ -13,7 +13,7 @@ import { Services } from "@/components/site/Services";
 import { VehicleStrip } from "@/components/site/VehicleStrip";
 import { site } from "@/config/site";
 
-const title = "TOTAL PERFORMANCE — Performance Upgrades, Engine & Forced Induction";
+const title = "Total Racing & Performance — Performance Upgrades & Custom Builds";
 
 export const Route = createFileRoute("/")({
   head: () => ({
