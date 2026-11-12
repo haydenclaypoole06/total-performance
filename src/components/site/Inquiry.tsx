@@ -39,14 +39,40 @@ const fields: {
   wide?: boolean;
   options?: readonly string[];
 }[] = [
-  { name: "name", label: "Name", required: true, autoComplete: "name" },
-  { name: "email", label: "Email", required: true, type: "email", autoComplete: "email" },
-  { name: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { name: "vehicle", label: "Vehicle year / make / model", required: true, placeholder: "e.g. 2016 Corvette Stingray" },
-  { name: "currentModifications", label: "Current modifications", multiline: true, wide: true },
-  { name: "request", label: "What would you like done?", required: true, multiline: true, wide: true },
-  { name: "budget", label: "Approximate budget", options: site.inquiry.budgetOptions },
-  { name: "timeframe", label: "Preferred timeframe", options: site.inquiry.timeframeOptions },
+   {
+    name: "name",
+    label: "Your name",
+    required: true,
+    autoComplete: "name",
+  },
+  {
+    name: "email",
+    label: "Email",
+    required: true,
+    type: "email",
+    autoComplete: "email",
+  },
+  {
+    name: "phone",
+    label: "Phone",
+    type: "tel",
+    autoComplete: "tel",
+  },
+  {
+    name: "vehicle",
+    label: "Vehicle year / make / model",
+    required: true,
+    placeholder: "e.g. 2016 Corvette Stingray",
+  },
+  {
+    name: "request",
+    label: "What can we help with?",
+    required: true,
+    multiline: true,
+    wide: true,
+    placeholder:
+      "Tell us about an upgrade, repair, or issue you’d like help with. It’s okay if you’re not sure where to start.",
+  },
 ];
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -172,9 +198,15 @@ export function Inquiry({ index }: { index: string }) {
             <div role="status" className="rounded-sm border border-primary/60 bg-graphite p-8 shadow-glow md:p-12">
               <CheckCircle2 aria-hidden="true" className="h-10 w-10 text-ice" />
               <h3 className="font-display mt-6 text-4xl font-extrabold uppercase leading-none">Inquiry received.</h3>
-              <p className="mt-4 max-w-md text-muted-foreground">
-                Thanks — your project details reached us. We’ll be in touch about next steps. {inquiry.note}
-              </p>
+              <p className="mt-4 max-w-md leading-relaxed text-muted-foreground">
+  Thanks for reaching out to Total Performance. We’ll review your
+  request and contact you using the details you provided to discuss
+  your options and the next step.
+</p>
+<p className="mt-4 max-w-md text-sm text-muted-foreground">
+  Your inquiry is not a confirmed appointment. We’ll arrange scheduling
+  with you directly.
+</p>
               <Button variant="tech" size="xl" className="mt-8" onClick={() => setStatus("idle")}>
                 Send another inquiry
               </Button>
