@@ -27,7 +27,7 @@ function Privacy() {
           <Link to="/" className="flex items-center gap-3">
             <LogoMark className="h-7" />
             <span className="font-display text-lg font-extrabold uppercase tracking-[0.08em]">
-              Total <span className="text-primary">Performance</span>
+              Total <span className="text-primary">Racing &amp; Performance</span>
             </span>
           </Link>
           <Link to="/" className="label-mono inline-flex items-center gap-2 text-muted-foreground hover:text-foreground">
