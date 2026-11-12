@@ -199,7 +199,7 @@ export function Inquiry({ index }: { index: string }) {
               <CheckCircle2 aria-hidden="true" className="h-10 w-10 text-ice" />
               <h3 className="font-display mt-6 text-4xl font-extrabold uppercase leading-none">Inquiry received.</h3>
               <p className="mt-4 max-w-md leading-relaxed text-muted-foreground">
-  Thanks for reaching out to Total Performance. We’ll review your
+  Thanks for reaching out to Total Racing & Performance. We’ll review your
   request and contact you using the details you provided to discuss
   your options and the next step.
 </p>
