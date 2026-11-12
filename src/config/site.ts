@@ -162,15 +162,28 @@ export const site = {
   },
 
   approach: {
-    heading: "YOUR CAR. A CLEAR PLAN.",
-    copy: "Every project starts with a conversation about your car, your goals, and how you use it. From an individual upgrade to a larger build, the details deserve attention.",
+       heading: "EVERY BUILD DESERVES A PLAN OF ITS OWN.",
+    copy:
+      "Good work starts with a clear understanding of what you want. We help you sort through the options, explain our recommendations, and plan the work around your car, your priorities, and your budget.",
     themes: [
-      { title: "Goals before parts", text: "We start with how you drive and what you want to feel, then choose the parts." },
-      { title: "A combination that works together", text: "Each change is considered against the rest of the car, not in isolation." },
-      { title: "Attention to installation details", text: "Routing, fitment and finish matter as much as the part itself." },
-      { title: "Clear communication", text: "You know what’s planned, what it involves, and what comes next." },
+      {
+        title: "Understand the goal",
+        text: "More power, better handling, or a problem you need solved—we start with what matters to you and how you use your car.",
+      },
+      {
+        title: "Plan the complete job",
+        text: "We look beyond the main upgrade to the supporting parts, compatibility, and installation details that make the combination work.",
+      },
+      {
+        title: "Follow through on the details",
+        text: "Fitment, wiring, routing, and finish all matter. We give the installation the same consideration as the parts we choose.",
+      },
+      {
+        title: "Keep things clear",
+        text: "Know what’s included, why we recommend it, and what to expect. If something changes, we discuss it with you before moving ahead.",
+      },
     ],
-    confirmed: false,
+    confirmed: true,
     image: {
       src: workshop,
       alt: "Illustrative image of a performance workshop at night",
