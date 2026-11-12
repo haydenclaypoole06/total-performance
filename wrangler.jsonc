@@ -12,5 +12,12 @@
   "vars": {
     "SUPABASE_URL": "https://c--4d29f325-504b-4f10-8da0-5a077e2f9053-prod.lovable.cloud",
     "SUPABASE_PUBLISHABLE_KEY": "sb_publishable__ZUQ4Pc01SgLvNU4Yhdy9Q_wAfuEmYu"
+  },
+"d1_databases": [
+  {
+    "binding": "DB",
+    "database_name": "total-performance-inquiries",
+    "database_id": "7ba7da51-46a2-4489-9305-1dd41a2a47a5"
   }
+]
 }
