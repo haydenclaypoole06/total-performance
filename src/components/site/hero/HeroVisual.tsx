@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 
-import tpMark from "@/assets/tp-mark-light.png.asset.json";
+const tpMark = { url: "/brand/trp-mark-dark.svg" };
 
 const MonogramScene = lazy(() => import("./MonogramScene"));
 

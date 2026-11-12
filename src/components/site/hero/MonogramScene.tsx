@@ -1,5 +1,5 @@
 /**
- * Hero centerpiece: the owner's TP monogram as machined 3D billet (chrome T, candy-blue P)
+ * Hero centerpiece: the owner's TRP monogram as machined 3D billet (chrome T, candy-blue R and P)
  * in front of a tachometer ring. Every ~10s the scene "revs": the needle sweeps to redline,
  * the monogram spins once and a light streak runs across the chrome.
  * Loaded lazily on the client only (see HeroVisual).
@@ -9,7 +9,7 @@ import { Environment, Lightformer } from "@react-three/drei";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { P_OUTLINES, T_OUTLINES } from "./tp-outline";
+import { P_OUTLINES, R_OUTLINES, T_OUTLINES } from "./trp-outline";
 
 export interface MonogramSceneProps {
   active: boolean; // animate (in view, tab visible)
@@ -110,6 +110,7 @@ function Monogram({ active, reducedMotion, compact, onReady }: MonogramSceneProp
   const geo = useMemo(
     () => ({
       t: buildGeometry(T_OUTLINES),
+      r: buildGeometry(R_OUTLINES),
       p: buildGeometry(P_OUTLINES),
       tick: new THREE.BoxGeometry(0.018, 0.16, 0.02),
       tickMajor: new THREE.BoxGeometry(0.03, 0.28, 0.02),
@@ -313,6 +314,7 @@ function Monogram({ active, reducedMotion, compact, onReady }: MonogramSceneProp
         {/* the monogram */}
         <group ref={spin} scale={scale}>
           <mesh geometry={geo.t} material={[mats.chrome, mats.billet]} />
+          <mesh geometry={geo.r} material={[mats.blue, mats.billet]} position={[0, 0, 0.035]} />
           <mesh geometry={geo.p} material={[mats.blue, mats.billet]} position={[0, 0, 0.07]} />
         </group>
       </group>
