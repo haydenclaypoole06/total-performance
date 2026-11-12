@@ -76,7 +76,7 @@ export function Hero() {
             <span aria-hidden="true" className="h-px w-10 bg-primary" />
             {hero.eyebrow}
           </p>
-          <h1 id="hero-heading" className="display text-[clamp(4.5rem,15vw,11.5rem)]">
+          <h1 id="hero-heading" className="display text-[clamp(2.5rem,7vw,5.4rem)]">
             <span className="block">{hero.headline[0]}</span>
             <span className="block text-primary">{hero.headline[1]}</span>
           </h1>
