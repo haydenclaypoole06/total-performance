@@ -62,9 +62,9 @@ export const site = {
   },
 
   services: {
-    heading: "PERFORMANCE WITH A PURPOSE.",
+        heading: "YOUR NEXT UPGRADE STARTS HERE.",
     intro:
-      "Every upgrade should earn its place. Pick a starting point and we’ll talk through how it fits the rest of your car.",
+      "Whether you know exactly what you want or need help deciding where to start, we’ll help you choose upgrades that fit your car, your goals, and the way you drive.",
     items: [
       {
         number: "01",
