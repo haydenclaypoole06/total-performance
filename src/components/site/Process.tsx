@@ -11,7 +11,7 @@ export function Process({ index }: { index: string }) {
         <Reveal>
           <SectionLabel index={index}>Process</SectionLabel>
           <h2 id="process-heading" className="display mt-6 text-[clamp(2.75rem,7vw,5.5rem)]">
-            From idea to <span className="text-primary">next step.</span>
+            Let’s get your <span className="text-primary">build started.</span>
           </h2>
         </Reveal>
 
