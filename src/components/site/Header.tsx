@@ -52,17 +52,17 @@ export function Header() {
         Skip to content
       </a>
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 md:h-20 md:px-8 lg:grid-cols-[auto_1fr_auto]">
-        <a href="#top" className="flex min-w-0 items-center gap-3" aria-label="Total Racing & Performance — back to top">
-          <LogoMark className="h-7 shrink-0 md:h-8" />
-          <span className="font-display min-w-0 leading-none uppercase">
-  <span className="block text-lg font-extrabold tracking-[0.08em] md:text-xl">
-    Total
+        <a
+  href="#top"
+  className="flex min-w-0 items-center gap-3"
+  aria-label="Total Racing & Performance — back to top"
+>
+  <LogoMark className="h-5 shrink-0 md:h-6" />
+
+  <span className="font-display whitespace-nowrap text-sm font-extrabold uppercase tracking-[0.02em] md:text-lg">
+    Total <span className="text-primary">Racing &amp; Performance</span>
   </span>
-  <span className="mt-1 block whitespace-nowrap text-[10px] font-bold tracking-[0.05em] text-primary md:text-xs">
-    Racing &amp; Performance
-  </span>
-</span>
-        </a>
+</a>
 
         <nav aria-label="Primary" className="hidden justify-center lg:flex">
           <ul className="flex items-center gap-10">
