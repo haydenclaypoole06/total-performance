@@ -64,7 +64,7 @@ export const submitInquiry = createServerFn({ method: "POST" })
             from: "Total Performance <onboarding@resend.dev>",
             to: ["txtotalperformance@gmail.com"],
             reply_to: data.email,
-            subject: "New Total Performance inquiry",
+            subject: `${data.name} | ${data.vehicle}`,
             text: [
               "A new inquiry has been saved in Cloudflare D1.",
               "",
