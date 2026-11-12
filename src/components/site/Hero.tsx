@@ -63,12 +63,6 @@ export function Hero() {
       >
         <HeroVisual />
       </div>
-      <p
-        aria-hidden="true"
-        className="label-mono absolute right-5 top-24 hidden text-[0.62rem] text-muted-foreground md:block lg:right-8"
-      >
-        Fig. 01 — TP / redline study
-      </p>
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-5 pb-24 pt-[48svh] md:justify-center md:px-8 md:pb-28 md:pt-28">
         <div className="max-w-2xl">
@@ -97,7 +91,6 @@ export function Hero() {
 
       <div className="absolute bottom-6 left-0 right-0 mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8">
         <TachCue />
-        <p className="label-mono hidden text-[0.62rem] text-muted-foreground sm:block">{site.tagline}</p>
       </div>
     </section>
   );
